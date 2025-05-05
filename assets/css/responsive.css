@@ -1,3 +1,11 @@
+@media(min-width: 576px) {
+  .title-date {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 20px;
+  }
+}
+
 @media(min-width: 768px) {
     .journal-container {
         max-width:700px;
