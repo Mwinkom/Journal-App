@@ -7,6 +7,7 @@
   --text-dark: #1f2937;
   --bg-light: #ffffff;
   --gray: #6b7280;
+  --error: rgb(189, 6, 6); 
 }
 
 * {
@@ -128,6 +129,12 @@ textarea {
 
 .btn-primary:hover {
   background-color: var(--purple);
+}
+
+#save-error{
+  color: var(--error);
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 
