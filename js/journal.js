@@ -1,3 +1,5 @@
+import { addEntryCard } from "./ui.js";
+
 const saveBtn = document.querySelector('.btn-primary');
 
 //Define the JournalEntry class
@@ -24,18 +26,23 @@ saveBtn.addEventListener('click', () => {
     //Push the new journal entry to the array
     //Check if the fields are empty before pushing to the array
     if(mood.value == "" || title.value.trim() == "" || date.value == "" || content.value.trim() == ""){
-        document.getElementById('save-error').textContent = 'Please fill in all fields first!'
+        document.getElementById('save-error').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>
+                                                            Please fill in all fields!`
     }
     else{
         document.getElementById('save-error').textContent = ''
-        journalEntries.push(
-            new JournalEntry(mood.value, title.value, date.value, content.value)
-        );
+
+        const newEntry = new JournalEntry(mood.value, title.value, date.value, content.value);
+
+        journalEntries.push(newEntry);
 
         mood.value = "";
         title.value = "";
         date.value = "";
         content.value = "";
+
+        //Call the addEntryCard function to add the new entry to the UI
+        addEntryCard(newEntry);
     }
 })
 
