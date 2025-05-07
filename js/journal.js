@@ -1,10 +1,12 @@
-import { addEntryCard } from "./ui.js";
+import { addEntryCard, handleCardButtons, refreshEntriesUI } from "./ui.js";
 
+let isEditing = false; // Flag to check if we are in edit mode
+let editIndex = null;  // Index of the entry being edited
 const saveBtn = document.querySelector('.btn-primary');
 
-//Define the JournalEntry class
-class JournalEntry{
-    constructor(mood,title,date,content){
+// Define the JournalEntry class
+class JournalEntry {
+    constructor(mood, title, date, content) {
         this.mood = mood;
         this.title = title;
         this.date = date;
@@ -12,10 +14,8 @@ class JournalEntry{
     }
 }
 
-//Create an array to hold journal entries
-//This will be used to store the journal entries in memory
-const journalEntries = [];
-
+// Create an array to hold journal entries in memory
+export const journalEntries = [];
 
 saveBtn.addEventListener('click', () => {
     const mood = document.getElementById('mood');
@@ -23,27 +23,68 @@ saveBtn.addEventListener('click', () => {
     const date = document.getElementById('entry-date');
     const content = document.getElementById('entry');
 
-    //Push the new journal entry to the array
-    //Check if the fields are empty before pushing to the array
-    if(mood.value == "" || title.value.trim() == "" || date.value == "" || content.value.trim() == ""){
-        document.getElementById('save-error').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>
-                                                            Please fill in all fields!`
+    // Validate form input
+    if (mood.value == "" || title.value.trim() == "" || date.value == "" || content.value.trim() == "") {
+        document.getElementById('save-error').innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Please fill in all fields!`;
+        return;
     }
-    else{
-        document.getElementById('save-error').textContent = ''
 
+    document.getElementById('save-error').textContent = '';
+
+    if (isEditing && editIndex !== null) {
+        // Update the existing journal entry
+        journalEntries[editIndex].mood = mood.value;
+        journalEntries[editIndex].title = title.value;
+        journalEntries[editIndex].date = date.value;
+        journalEntries[editIndex].content = content.value;
+
+        // Reset edit mode
+        isEditing = false;
+        editIndex = null;
+        saveBtn.textContent = "Save Entry";
+
+        // Re-render all entries with updates
+        refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
+
+    } else {
+        // Add a new journal entry
         const newEntry = new JournalEntry(mood.value, title.value, date.value, content.value);
-
         journalEntries.push(newEntry);
 
-        mood.value = "";
-        title.value = "";
-        date.value = "";
-        content.value = "";
-
-        //Call the addEntryCard function to add the new entry to the UI
-        addEntryCard(newEntry);
+        const newCard = addEntryCard(newEntry, onEditCallback, onDeleteCallback);
+        handleCardButtons(newCard, newEntry, onEditCallback, onDeleteCallback);
     }
-})
 
-console.log(journalEntries)
+    // Reset form fields
+    mood.value = "";
+    title.value = "";
+    date.value = "";
+    content.value = "";
+});
+
+console.log(journalEntries);
+
+// Callback for Edit button
+function onEditCallback(entry) {
+    editIndex = journalEntries.indexOf(entry);
+    isEditing = true;
+
+    document.getElementById('mood').value = entry.mood;
+    document.getElementById('title').value = entry.title;
+    document.getElementById('entry-date').value = entry.date;
+    document.getElementById('entry').value = entry.content;
+
+    saveBtn.textContent = "Save Updates";
+}
+
+// Callback for Delete button
+function onDeleteCallback(entry) {
+    const confirmDelete = confirm("Are you sure you want to delete this journal entry?");
+    if (!confirmDelete) return;
+
+    const index = journalEntries.indexOf(entry);
+    if (index !== -1) {
+        journalEntries.splice(index, 1);
+        refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
+    }
+}
