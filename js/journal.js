@@ -34,7 +34,7 @@ saveBtn.addEventListener('click', () => {
     document.getElementById('save-error').textContent = '';
 
     if (isEditing && editIndex !== null) {
-        showToast("Your journal entry was updated successfully!");
+        showToast("Your entry was updated successfully!");
 
 
         // Update the existing journal entry
@@ -58,7 +58,7 @@ saveBtn.addEventListener('click', () => {
         journalEntries.push(newEntry);
         saveEntries(journalEntries); // Save to localStorage
 
-        showToast("Your journal entry was saved successfully!");
+        showToast("Your entry was saved successfully!");
 
         const newCard = addEntryCard(newEntry, onEditCallback, onDeleteCallback);
         handleCardButtons(newCard, newEntry, onEditCallback, onDeleteCallback);
