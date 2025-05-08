@@ -2,7 +2,7 @@
   .title-date {
     display: grid;
     grid-template-columns: 1.7fr 1fr;
-    gap: 20px;
+    gap: 15px;
   }
 }
 
@@ -17,7 +17,7 @@
       .search-bar {
         display: grid;
         grid-template-columns: 1.8fr 1fr;
-        gap: 20px;
+        gap: 15px;
         margin: 20px 0;
       }
 }

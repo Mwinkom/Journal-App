@@ -1,4 +1,4 @@
-import { addEntryCard, handleCardButtons, refreshEntriesUI } from "./ui.js";
+import { addEntryCard, handleCardButtons, refreshEntriesUI, showToast } from "./ui.js";
 
 let isEditing = false; // Flag to check if we are in edit mode
 let editIndex = null;  // Index of the entry being edited
@@ -32,6 +32,9 @@ saveBtn.addEventListener('click', () => {
     document.getElementById('save-error').textContent = '';
 
     if (isEditing && editIndex !== null) {
+        showToast("Your entry was updated successfully!");
+
+
         // Update the existing journal entry
         journalEntries[editIndex].mood = mood.value;
         journalEntries[editIndex].title = title.value;
@@ -50,6 +53,8 @@ saveBtn.addEventListener('click', () => {
         // Add a new journal entry
         const newEntry = new JournalEntry(mood.value, title.value, date.value, content.value);
         journalEntries.push(newEntry);
+
+        showToast("Your entry was saved successfully!");
 
         const newCard = addEntryCard(newEntry, onEditCallback, onDeleteCallback);
         handleCardButtons(newCard, newEntry, onEditCallback, onDeleteCallback);
@@ -84,7 +89,7 @@ function onDeleteCallback(entry) {
 
     const index = journalEntries.indexOf(entry);
     if (index !== -1) {
-        journalEntries.splice(index, 1);
+        journalEntries.splice(index, 1); //
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
     }
 }

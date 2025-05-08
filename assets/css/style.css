@@ -75,6 +75,7 @@ header {
 .title-date {
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
 h1 {
@@ -107,6 +108,7 @@ select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
+  background-color: var(--bg-light);
   border-radius: 5px;
   font-size: 1rem;
 }
@@ -124,6 +126,7 @@ textarea {
   background-color: var(--purple-dark);
   color: white;
   font-weight: 600;
+  font-size: 0.9rem;
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
@@ -203,4 +206,22 @@ textarea {
 
 .entry-actions .delete:hover{
   color: rgb(235, 33, 33);
+}
+
+/* Toast notification for successful save*/
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #7c3aed;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
 }

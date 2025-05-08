@@ -1,10 +1,14 @@
 // Import journalEntries to use inside refreshEntriesUI
 import { journalEntries } from './journal.js';
 
+const dateInput = document.getElementById('entry-date');
+const today = new Date().toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+dateInput.value = today;
+
+const entriesContainer = document.querySelector('.entries');
 // Add entry card to the journal
 // This function creates a new card and returns it
 export function addEntryCard(journalEntry, onEdit, onDelete) {
-    const entriesContainer = document.querySelector('.entries');
     const entryCard = document.createElement('div');
     entryCard.classList.add('entry-card');
 
@@ -23,6 +27,11 @@ export function addEntryCard(journalEntry, onEdit, onDelete) {
     if (journalEntry.content.length > 100) {
         subText.textContent = subText.textContent.substring(0, 99) + " . . .";
     }
+
+    // Attach button event handlers
+    handleCardButtons(entryCard, journalEntry, onEdit, onDelete);
+
+    entriesContainer.appendChild(entryCard);
 
     // Return the card for event attachment
     return entryCard;
@@ -45,10 +54,6 @@ export function handleCardButtons(entryCard, journalEntry, onEdit, onDelete) {
             onEdit(journalEntry); // Trigger edit callback
         }
     });
-
-    // Append the card to the DOM
-    const entriesContainer = document.querySelector('.entries');
-    entriesContainer.appendChild(entryCard);
 }
 
 // Refresh the entire journal UI
@@ -58,7 +63,19 @@ export function refreshEntriesUI(entries, onEdit, onDelete) {
     entriesContainer.innerHTML = ''; // Clear all cards
 
     entries.forEach(entry => {
-        const card = addEntryCard(entry, onEdit, onDelete);
-        handleCardButtons(card, entry, onEdit, onDelete);
+        const card = addEntryCard(entry, onEdit, onDelete); // Create a new card for each entry
+        handleCardButtons(card, entry, onEdit, onDelete); // Attach event handlers to the card buttons
     });
 }
+
+
+// Show a toast message for 3 seconds
+export function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+  
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
