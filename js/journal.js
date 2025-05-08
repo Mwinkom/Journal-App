@@ -1,14 +1,8 @@
 import { addEntryCard, handleCardButtons, refreshEntriesUI, showToast } from "./ui.js";
-import { saveEntries, getEntries } from "./storage.js";
 
 let isEditing = false; // Flag to check if we are in edit mode
 let editIndex = null;  // Index of the entry being edited
 const saveBtn = document.querySelector('.btn-primary');
-
-const dateInput = document.getElementById('entry-date');
-const today = new Date().toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-dateInput.value = today;
-
 
 // Define the JournalEntry class
 class JournalEntry {
@@ -21,7 +15,7 @@ class JournalEntry {
 }
 
 // Create an array to hold journal entries in memory
-export const journalEntries = getEntries(); // Load saved entries on page load
+export const journalEntries = [];
 
 saveBtn.addEventListener('click', () => {
     const mood = document.getElementById('mood');
@@ -47,8 +41,6 @@ saveBtn.addEventListener('click', () => {
         journalEntries[editIndex].date = date.value;
         journalEntries[editIndex].content = content.value;
 
-        saveEntries(journalEntries); // Save to localStorage
-
         // Reset edit mode
         isEditing = false;
         editIndex = null;
@@ -61,7 +53,6 @@ saveBtn.addEventListener('click', () => {
         // Add a new journal entry
         const newEntry = new JournalEntry(mood.value, title.value, date.value, content.value);
         journalEntries.push(newEntry);
-        saveEntries(journalEntries); // Save to localStorage
 
         showToast("Your entry was saved successfully!");
 
@@ -72,7 +63,7 @@ saveBtn.addEventListener('click', () => {
     // Reset form fields
     mood.value = "";
     title.value = "";
-    date.value = today;
+    date.value = "";
     content.value = "";
 });
 
@@ -97,12 +88,8 @@ function onDeleteCallback(entry) {
     if (!confirmDelete) return;
 
     const index = journalEntries.indexOf(entry);
-    if (index !== -1) // Check if the entry exists in the array
- {
-        journalEntries.splice(index, 1); // Remove the entry from the array
-        saveEntries(journalEntries);
+    if (index !== -1) {
+        journalEntries.splice(index, 1); //
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
     }
 }
-
-refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
