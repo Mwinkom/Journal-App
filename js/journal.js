@@ -1,8 +1,10 @@
 import { addEntryCard, handleCardButtons, refreshEntriesUI, showToast } from "./ui.js";
+import { saveEntries, getEntries } from "./storage.js";
 
 let isEditing = false; // Flag to check if we are in edit mode
 let editIndex = null;  // Index of the entry being edited
 const saveBtn = document.querySelector('.btn-primary');
+
 
 // Define the JournalEntry class
 class JournalEntry {
@@ -15,7 +17,7 @@ class JournalEntry {
 }
 
 // Create an array to hold journal entries in memory
-export const journalEntries = [];
+export const journalEntries = getEntries(); // Load saved entries on page load
 
 saveBtn.addEventListener('click', () => {
     const mood = document.getElementById('mood');
@@ -32,7 +34,7 @@ saveBtn.addEventListener('click', () => {
     document.getElementById('save-error').textContent = '';
 
     if (isEditing && editIndex !== null) {
-        showToast("Your entry was updated successfully!");
+        showToast("Your journal entry was updated successfully!");
 
 
         // Update the existing journal entry
@@ -45,6 +47,7 @@ saveBtn.addEventListener('click', () => {
         isEditing = false;
         editIndex = null;
         saveBtn.textContent = "Save Entry";
+        saveEntries(journalEntries); // Save to localStorage
 
         // Re-render all entries with updates
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
@@ -53,8 +56,9 @@ saveBtn.addEventListener('click', () => {
         // Add a new journal entry
         const newEntry = new JournalEntry(mood.value, title.value, date.value, content.value);
         journalEntries.push(newEntry);
+        saveEntries(journalEntries); // Save to localStorage
 
-        showToast("Your entry was saved successfully!");
+        showToast("Your journal entry was saved successfully!");
 
         const newCard = addEntryCard(newEntry, onEditCallback, onDeleteCallback);
         handleCardButtons(newCard, newEntry, onEditCallback, onDeleteCallback);
@@ -63,7 +67,7 @@ saveBtn.addEventListener('click', () => {
     // Reset form fields
     mood.value = "";
     title.value = "";
-    date.value = "";
+    date.value = today;
     content.value = "";
 });
 
@@ -84,12 +88,13 @@ export function onEditCallback(entry) {
 
 // Callback for Delete button
 export function onDeleteCallback(entry) {
-    const confirmDelete = confirm("Are you sure you want to delete this journal entry?");
-    if (!confirmDelete) return;
-
-    const index = journalEntries.indexOf(entry);
-    if (index !== -1) {
-        journalEntries.splice(index, 1); //
+const index = journalEntries.indexOf(entry);
+    if (index !== -1) // Check if the entry exists in the array
+    {
+        journalEntries.splice(index, 1); // Remove the entry from the array
+        saveEntries(journalEntries);
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
     }
 }
+
+refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
