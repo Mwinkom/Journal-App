@@ -186,7 +186,7 @@ textarea {
 .entry-actions {
   margin-top: 10px;
   display: flex;
-  gap: 15px;
+  gap: 20px;
 }
 
 .entry-actions button {
@@ -194,6 +194,7 @@ textarea {
   background: transparent;
   cursor: pointer;
   color: var(--purple-dark);
+  font-size: 1rem;
 }
 
 .entry-actions button:hover {
