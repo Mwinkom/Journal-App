@@ -70,7 +70,7 @@ saveBtn.addEventListener('click', () => {
 console.log(journalEntries);
 
 // Callback for Edit button
-function onEditCallback(entry) {
+export function onEditCallback(entry) {
     editIndex = journalEntries.indexOf(entry);
     isEditing = true;
 
@@ -83,7 +83,7 @@ function onEditCallback(entry) {
 }
 
 // Callback for Delete button
-function onDeleteCallback(entry) {
+export function onDeleteCallback(entry) {
     const confirmDelete = confirm("Are you sure you want to delete this journal entry?");
     if (!confirmDelete) return;
 

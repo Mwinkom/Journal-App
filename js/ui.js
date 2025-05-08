@@ -1,5 +1,5 @@
 // Import journalEntries to use inside refreshEntriesUI
-import { journalEntries } from './journal.js';
+import { journalEntries, onEditCallback, onDeleteCallback} from './journal.js';
 
 const dateInput = document.getElementById('entry-date');
 const today = new Date().toISOString().split('T')[0]; // Format date to YYYY-MM-DD
@@ -79,3 +79,40 @@ export function showToast(message) {
       toast.classList.remove('show');
     }, 3000);
   }
+
+//Filter entries by mood
+const moodFilter = document.getElementById('mood-filter');
+moodFilter.addEventListener('change', filterEntriesByMood);
+
+function filterEntriesByMood() {
+    const moodFilter = document.getElementById('mood-filter');
+    const selectedMood = moodFilter.value;
+
+    const filtered = journalEntries.filter(entry => {
+        return selectedMood === "" || entry.mood === selectedMood;
+    });
+
+    refreshEntriesUI(filtered, onEditCallback, onDeleteCallback);
+}
+
+
+// Filter entries by search term
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', filterEntriesBySearch);
+
+function filterEntriesBySearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    console.log('Search Term:',searchTerm);
+  
+    const filtered = journalEntries.filter(entry => {
+      return (
+        entry.title.toLowerCase().includes(searchTerm) ||
+        entry.content.toLowerCase().includes(searchTerm)
+      );
+    });
+  
+    refreshEntriesUI(filtered, onEditCallback, onDeleteCallback);
+}
+  
+
