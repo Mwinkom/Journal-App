@@ -5,6 +5,10 @@ let isEditing = false; // Flag to check if we are in edit mode
 let editIndex = null;  // Index of the entry being edited
 const saveBtn = document.querySelector('.btn-primary');
 
+const dateInput = document.getElementById('entry-date');
+const today = new Date().toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+dateInput.value = today;
+
 
 // Define the JournalEntry class
 class JournalEntry {

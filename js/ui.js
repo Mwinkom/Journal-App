@@ -1,10 +1,6 @@
 // Import journalEntries to use inside refreshEntriesUI
 import { journalEntries, onEditCallback, onDeleteCallback} from './journal.js';
 
-const dateInput = document.getElementById('entry-date');
-const today = new Date().toISOString().split('T')[0]; // Format date to YYYY-MM-DD
-dateInput.value = today;
-
 const entriesContainer = document.querySelector('.entries');
 // Add entry card to the journal
 // This function creates a new card and returns it
