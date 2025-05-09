@@ -1,5 +1,6 @@
 import { addEntryCard, handleCardButtons, refreshEntriesUI, showToast } from "./ui.js";
 import { saveEntries, getEntries } from "./storage.js";
+import { filterEntries } from "./filter.js";
 
 let isEditing = false; // Flag to check if we are in edit mode
 let editIndex = null;  // Index of the entry being edited
@@ -8,6 +9,21 @@ const saveBtn = document.querySelector('.btn-primary');
 const dateInput = document.getElementById('entry-date');
 const today = new Date().toISOString().split('T')[0]; // Format date to YYYY-MM-DD
 dateInput.value = today;
+
+// Apply filters to the journal entries
+// Filter by mood and search term
+const searchBar = document.querySelector('.search-bar');
+
+searchBar.addEventListener('input', applyFilters);  // Handles typing in input
+searchBar.addEventListener('change', applyFilters); // Handles mood change
+
+function applyFilters() {
+  const searchTerm = document.getElementById('search-input').value;
+  const selectedMood = document.getElementById('mood-filter').value;
+
+  const filtered = filterEntries(journalEntries, selectedMood, searchTerm);
+  refreshEntriesUI(filtered, onEditCallback, onDeleteCallback);
+}
 
 
 // Define the JournalEntry class
@@ -51,9 +67,10 @@ saveBtn.addEventListener('click', () => {
         editIndex = null;
         saveBtn.textContent = "Save Entry";
         saveEntries(journalEntries); // Save to localStorage
-
         // Re-render all entries with updates
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
+        applyFilters();
+        
 
     } else {
         // Add a new journal entry
@@ -64,6 +81,7 @@ saveBtn.addEventListener('click', () => {
         showToast("Your entry was saved successfully!");
 
         addEntryCard(newEntry, onEditCallback, onDeleteCallback);
+        applyFilters();
     }
 
     // Reset form fields
@@ -84,6 +102,9 @@ export function onEditCallback(entry) {
     document.getElementById('title').value = entry.title;
     document.getElementById('entry-date').value = entry.date;
     document.getElementById('entry').value = entry.content;
+
+    // Scroll to the form section smoothly
+    document.querySelector('.section-wrapper').scrollIntoView({ behavior: 'smooth' });
 
     saveBtn.textContent = "Save Updates";
 }
