@@ -118,6 +118,7 @@ export function onDeleteCallback(entry) {
     if (index !== -1) {
         journalEntries.splice(index, 1); 
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
+        applyFilters();
     }
 }
 
