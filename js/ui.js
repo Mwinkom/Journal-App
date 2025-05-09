@@ -47,6 +47,7 @@ export function handleCardButtons(entryCard, journalEntry, onEdit, onDelete) {
         }
 
         if (button.classList.contains('edit')) {
+            document.getElementById('save-error').textContent = '';
             onEdit(journalEntry); // Trigger edit callback
         }
     });
@@ -59,8 +60,7 @@ export function refreshEntriesUI(entries, onEdit, onDelete) {
     entriesContainer.innerHTML = ''; // Clear all cards
 
     entries.forEach(entry => {
-        const card = addEntryCard(entry, onEdit, onDelete); // Create a new card for each entry
-        handleCardButtons(card, entry, onEdit, onDelete); // Attach event handlers to the card buttons
+        addEntryCard(entry, onEdit, onDelete);
     });
 }
 
