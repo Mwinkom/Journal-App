@@ -40,7 +40,6 @@ saveBtn.addEventListener('click', () => {
     if (isEditing && editIndex !== null) {
         showToast("Your entry was updated successfully!");
 
-
         // Update the existing journal entry
         journalEntries[editIndex].mood = mood.value;
         journalEntries[editIndex].title = title.value;
@@ -64,8 +63,7 @@ saveBtn.addEventListener('click', () => {
 
         showToast("Your entry was saved successfully!");
 
-        const newCard = addEntryCard(newEntry, onEditCallback, onDeleteCallback);
-        handleCardButtons(newCard, newEntry, onEditCallback, onDeleteCallback);
+        addEntryCard(newEntry, onEditCallback, onDeleteCallback);
     }
 
     // Reset form fields
@@ -92,11 +90,12 @@ export function onEditCallback(entry) {
 
 // Callback for Delete button
 export function onDeleteCallback(entry) {
-const index = journalEntries.indexOf(entry);
-    if (index !== -1) // Check if the entry exists in the array
-    {
-        journalEntries.splice(index, 1); // Remove the entry from the array
-        saveEntries(journalEntries);
+    const confirmDelete = confirm("Are you sure you want to delete this journal entry?");
+    if (!confirmDelete) return;
+
+    const index = journalEntries.indexOf(entry);
+    if (index !== -1) {
+        journalEntries.splice(index, 1); 
         refreshEntriesUI(journalEntries, onEditCallback, onDeleteCallback);
     }
 }
