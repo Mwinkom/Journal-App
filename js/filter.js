@@ -1,4 +1,4 @@
-//Filter entries by mood
+//Filter entries by mood and search term
 export function filterEntries(entries, mood, searchTerm) {
   return entries.filter(entry => {
     const matchesMood = !mood || entry.mood === mood;
