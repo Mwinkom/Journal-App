@@ -78,9 +78,11 @@ export function showToast(message) {
 
 //Filter entries by mood
 const moodFilter = document.getElementById('mood-filter');
-moodFilter.addEventListener('change', filterEntriesByMood);
+document.addEventListener('DOMContentLoaded', () => {
+    moodFilter.addEventListener('change', filterEntriesByMood);
+});
 
-function filterEntriesByMood() {
+export function filterEntriesByMood() {
     const moodFilter = document.getElementById('mood-filter');
     const selectedMood = moodFilter.value;
 
@@ -94,9 +96,11 @@ function filterEntriesByMood() {
 
 // Filter entries by search term
 const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('input', filterEntriesBySearch);
+document.addEventListener('DOMContentLoaded', () => {
+    searchInput.addEventListener('input', filterEntriesBySearch);
+});
 
-function filterEntriesBySearch() {
+export function filterEntriesBySearch() {
     const searchInput = document.getElementById('search-input');
     const searchTerm = searchInput.value.toLowerCase().trim();
     console.log('Search Term:',searchTerm);
